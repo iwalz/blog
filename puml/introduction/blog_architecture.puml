@@ -1,0 +1,46 @@
+@startuml
+skinparam cloud {
+    BackgroundColor white
+    BorderColor black
+}
+skinparam component {
+    BackgroundColor white
+    BorderColor black
+}
+skinparam artifact{
+    BackgroundColor white
+    BorderColor black
+}
+skinparam actor {
+    BackgroundColor white
+    BorderColor black
+}
+skinparam node {
+    BackgroundColor white
+    BorderColor black
+}
+cloud github
+artifact repository
+cloud AWS
+component "AWS Lambda" as lambda
+component "S3 Bucket" as s3
+component "Go Blog Service" as blog
+component "ReactJS Frontend" as react
+node NATS
+actor You
+actor Me
+
+github -- repository : Commit hook
+github .> AWS : SNS Notification
+AWS ..> lambda : Trigger
+lambda --> NATS : Published event
+lambda --> s3 : Push JSON\nto bucket
+
+NATS <..> blog : Subscribe event
+s3 ..> blog : Update blog data
+repository -> lambda : Clone repo
+
+You -> react
+react -> blog
+Me -> repository
+@enduml
