@@ -86,16 +86,22 @@ Because the CRUD stuff really bores me in web contexts, I've build a more relyab
 
 [Github repository]
 > This repository is used to store my blog articles
+
 [Github SNS hook]
 > This hook is used to publish an event to the defined sns_topic
+
 [AWS Lambda]
 > A lambda function gets triggered via previous SNS topic
+
 [AWS S3]
 > The lambda function converts the Markdown to JSON, uploads these JSONs and pictures to an S3 bucket & publishes an event
+
 [NATS]
 > The event from AWS Lambda ends up as a message on NATS - this message forces my microservice to reload its blog content in memory, because the data in S3 has changed
+
 [Go-Micro]
 > The go-ecosystem I'm using for writing my services
+
 [ReactJS]
 > Frontend implementation
 
