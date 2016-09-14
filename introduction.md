@@ -70,6 +70,13 @@ I ship everything with a `Makefile`, it doesn't matter if it's a react js applic
 The registry is obviously connected to my kubernetes cluster, to power the application deployment. Since I'm running K8s > 1.3, the first choice was to go with [Deployments](http://kubernetes.io/docs/user-guide/deployments/) "for general purposes".
 My manifests for kubernetes live in a git repository and are automatically deployed with a systemd-unit at cluster startup time. 
 
+## Monitoring and logging
+For such a flexible and self-managing environment, monitoring and logging is one of the most important topics. But e.g. implementing a full blown [ELK] with a good sizing and failover setup is quiete expensive in AWS. That's why I'm using [Logz.io] - it's relativly cheap and comes with a powerful setup per default. It has also some great AWS goodies - and they're not only exposing a dashboard, but pretty much all the components of the ELK stack.
+
+For infrastructure monitoring, I decided to give google's [stackdriver] a chance. It was great for the beginning, easy to setup - but only limited to data, that can be queried via the CloudWatch API. I haven't tried the custom metrics so far, but not even being able to see the memory usage right away is a bit less than what I expected (memory usage isn't a default metric from CloudWatch).
+
+For Container monitoring, I use [heapster]. Straight forward, easy to integrate into k8s, just works. 
+
 ## The Blog architecture
 I'm gonna write about my blog architecture? Really? 
 Don't blame me about it, I'm also tired of the "regular ideas" of running a blog/cms (and I wanted to have a lightweight but powerful reference implementation) - so you can expect something that's worth writing about ;-)
@@ -77,15 +84,20 @@ Don't blame me about it, I'm also tired of the "regular ideas" of running a blog
 ### Involved components
 Because the CRUD stuff really bores me in web contexts, I've build a more relyable architecture and simply "micro-serviced" the blog part. Since every service can have it's own architectural design implementation (due to the power of containers/kubernetes/go-micro), this part just explains the technical components involved for this single, small unit.
 
-| Technology          | Used for |
-| ------------------- | -------- |
-| [Github repository] | This repository is used to store my blog articles  |
-| [Github SNS hook]   | This hook is used to publish an event to the defined sns_topic |
-| [AWS Lambda]        | A lambda function gets triggered via previous SNS topic |
-| [AWS S3]            | The lambda function converts the Markdown to JSON, uploads these JSONs and pictures to an S3 bucket & publishes an event |
-| [NATS]              | The event from AWS Lambda ends up as a message on NATS - this message forces my microservice to reload its blog content in memory, because the data in S3 has changed |
-| [Go-Micro]          | The go-ecosystem I'm using for writing my services |
-| [ReactJS]           | Frontend implementation |
+[Github repository]
+> This repository is used to store my blog articles
+[Github SNS hook]
+> This hook is used to publish an event to the defined sns_topic
+[AWS Lambda]
+> A lambda function gets triggered via previous SNS topic
+[AWS S3]
+> The lambda function converts the Markdown to JSON, uploads these JSONs and pictures to an S3 bucket & publishes an event
+[NATS]
+> The event from AWS Lambda ends up as a message on NATS - this message forces my microservice to reload its blog content in memory, because the data in S3 has changed
+[Go-Micro]
+> The go-ecosystem I'm using for writing my services
+[ReactJS]
+> Frontend implementation
 
 ### Architecture overview
 ![Blog Architecture][Blog Architecture]
@@ -102,3 +114,7 @@ This blog acted more as a proof of concept for a fully integrated platform, leve
 [Github SNS hook]: https://github.com/github/github-services/blob/master/docs/amazonsns
 [Github repository]: https://github.com/iwalz/blog
 [Blog Architecture]: img/introduction/blog_architecture.png
+[ELK]: https://www.elastic.co/de/webinars/introduction-elk-stack
+[Logz.io]: http://logz.io
+[stackdriver]: http://www.stackdriver.com/
+[heapster]: https://github.com/kubernetes/heapster
