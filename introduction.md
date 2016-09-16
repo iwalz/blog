@@ -1,12 +1,12 @@
-[//]: (I just launched my new platform on AWS, of course completly automated, machine failure resilent and cheap! In this post I'm gonna explain what powers my platform and how this blog is designed.)
-[//]: ("foo": "bar")
-[//]: ("foo": "bar")
-[//]: ("foo": "bar")
-# Introduction
-I just launched my new platform on AWS, of course completly automated, machine failure resilient and cheap! In this post I'm gonna explain what my platform powers and how this blog is designed.
+[//]: (I just launched my new platform on AWS, trying to leverage most of the best practices when it comes to cloud architecture and scalability. This platform is mostly used for proof of concepts and prototypes - and since today also as a public blog to share the experiences I made with this environment and the prototypes I've built.)
+[//]: ("docker": "1.10")
+[//]: ("kubernetes": "1.3.6")
+[//]: ("CoreOS": "1122.2.0")
+[//]: ("Puppet": "4.6.0")
+I just launched my new platform on AWS, trying to leverage most of the best practices when it comes to cloud architecture and scalability. This platform is mostly used for proof of concepts and prototypes - and since today also as a public blog to share the experiences I made with this environment and the prototypes I've built. 
 
 ## The components that power the automation pipeline
-You need different technologies of automation if you want to achieve a "fully automated environment". There's more than just spinning up machines. It's all about cloud architecture, service provision and applications from build to deployment.
+You need different layers of automation if you want to build a "fully automated environment". There's more than just spinning up machines. It's all about your cloud design, service provision and applications from build to deployment. With nowadays possiblities, you can build very complex cloud setups with just one command. The most important part is to use the right technology for your needs - and wire them correctly. 
 
 ### Cloud automation
 At the bginning, you need something to manage your Cloud Provider automatically - to spin up a VPC, setup the networking, routing and logically place some autoscaling groups there. This is where your Cloud Architecture lives.
