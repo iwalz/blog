@@ -131,10 +131,11 @@ The `Makefile` includes some basic tasks you might need for local testing. `make
 There's a reason, why I build everything on top of [alpine] - just because the smaller the container you run, the faster is your startup. Locally, and even more important, in a kubernetes (or similar orchestration system) environment. 
 The total size of this blog (with kind of exactly this setup) is about *25MB*. That is super small and super fast. The Webserver does not much, it simply need to serve some static files. That's a job every webserver can handle easily. But if you want to use some handy features from [Caddy] such as the [automatic HTTPS], just modify the `Caddyfile` according to your needs.
 
+[alpine]: https://hub.docker.com/_/alpine/
 [automatic HTTPS]: https://caddyserver.com/docs/automatic-https
 [Caddy]: https://caddyserver.com
-[webpack]: 
-[grunt]: 
-[gulp]: 
+[webpack]: https://webpack.github.io/
+[grunt]: http://gruntjs.com/
+[gulp]: http://gulpjs.com/
 [dockerhub]: https://hub.docker.com
 [npm scripts]: https://docs.npmjs.com/misc/scripts
