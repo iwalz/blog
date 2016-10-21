@@ -139,3 +139,4 @@ The total size of this blog (with kind of exactly this setup) is about *25MB*. T
 [gulp]: http://gulpjs.com/
 [dockerhub]: https://hub.docker.com
 [npm scripts]: https://docs.npmjs.com/misc/scripts
+[babel]: https://babeljs.io/

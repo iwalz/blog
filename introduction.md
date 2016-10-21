@@ -1,6 +1,6 @@
 [//]: (I just launched my new platform on AWS, trying to leverage most of the best practices when it comes to cloud architecture and scalability. This platform is mostly used for proof of concepts and prototypes - and since today also as a public blog to share the experiences I made with this environment and the prototypes I've built.)
 [//]: ("docker": "1.10")
-[//]: ("kubernetes": "1.3.6")
+[//]: ("kubernetes": "1.4.3")
 [//]: ("CoreOS": "1122.2.0")
 [//]: ("Puppet": "4.6.0")
 I just launched my new platform on AWS, trying to leverage most of the best practices when it comes to cloud architecture and scalability. This platform is mostly used for proof of concepts and prototypes - and since today also as a public blog to share the experiences I made with this environment and the prototypes I've built. 

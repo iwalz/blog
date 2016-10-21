@@ -1,0 +1,59 @@
+@startuml
+skinparam cloud {
+    BackgroundColor white
+    BorderColor black
+}
+skinparam component {
+    BackgroundColor white
+    BorderColor black
+}
+skinparam artifact{
+    BackgroundColor white
+    BorderColor black
+}
+skinparam actor {
+    BackgroundColor white
+    BorderColor black
+}
+skinparam node {
+    BackgroundColor white
+    BorderColor black
+}
+cloud atlas
+
+node machine1 <<consul agent>>
+node machine2 <<consul agent>>
+node machine3 <<consul agent>>
+node machine4 <<consul agent>>
+node machine5 <<consul agent>>
+node machine6 <<consul agent>>
+node machine7 <<consul agent>>
+node machine8 <<consul agent>>
+node machine9 <<consul agent>>
+node machine10 <<consul agent>>
+
+node "Consul cluster" as cc {
+    node consul1 <<consul server>>
+    node consul2 <<consul server>>
+    node consul3 <<consul server>>
+
+    consul1 -> consul2
+    consul1 --> consul3
+    consul2 --> consul3
+}
+
+machine1 ---> cc
+machine2 ---> cc
+machine3 ---> cc
+machine4 ---> cc
+machine5 ---> cc
+cc <----- machine6
+cc <----- machine7
+cc <----- machine8
+cc <----- machine9
+cc <----- machine10
+
+
+atlas .... cc
+
+@enduml

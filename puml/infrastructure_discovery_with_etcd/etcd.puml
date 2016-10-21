@@ -1,0 +1,59 @@
+@startuml
+skinparam cloud {
+    BackgroundColor white
+    BorderColor black
+}
+skinparam component {
+    BackgroundColor white
+    BorderColor black
+}
+skinparam artifact{
+    BackgroundColor white
+    BorderColor black
+}
+skinparam actor {
+    BackgroundColor white
+    BorderColor black
+}
+skinparam node {
+    BackgroundColor white
+    BorderColor black
+}
+cloud "public discovery\nservice" as public
+
+node machine1 <<systemd timer>>
+node machine2 <<systemd timer>>
+node machine3 <<systemd timer>>
+node machine4 <<systemd timer>>
+node machine5 <<systemd timer>>
+node machine6 <<systemd timer>>
+node machine7 <<systemd timer>>
+node machine8 <<systemd timer>>
+node machine9 <<systemd timer>>
+node machine10 <<systemd timer>>
+
+node "ETCD Cluster" as cc {
+    node etcd1 <<etcd server>>
+    node etcd2 <<etcd server>>
+    node etcd3 <<etcd server>>
+
+    etcd1 -> etcd2
+    etcd1 --> etcd3
+    etcd2 --> etcd3
+}
+
+machine1 ---> cc
+machine2 ---> cc
+machine3 ---> cc
+machine4 ---> cc
+machine5 ---> cc
+cc <----- machine6
+cc <----- machine7
+cc <----- machine8
+cc <----- machine9
+cc <----- machine10
+
+
+public .... cc
+
+@enduml

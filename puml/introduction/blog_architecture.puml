@@ -27,20 +27,20 @@ component "S3 Bucket" as s3
 component "Go Blog Service" as blog
 component "ReactJS Frontend" as react
 node NATS
-actor You
-actor Me
+actor Reader
+actor Writer
 
 github -- repository : Commit hook
 github .> AWS : SNS Notification
 AWS ..> lambda : Trigger
-lambda --> NATS : Published event
+lambda --> NATS : Publishe event
 lambda --> s3 : Push JSON\nto bucket
 
 NATS <..> blog : Subscribe event
 s3 ..> blog : Update blog data
 repository -> lambda : Clone repo
 
-You -> react
+Reader -> react
 react -> blog
-Me -> repository
+Writer -> repository
 @enduml
