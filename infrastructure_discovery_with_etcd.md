@@ -9,12 +9,16 @@ While consul actually has a page about [consul vs the others](https://www.consul
 
 ### Why not consul?
 Well, this should not be an anti-consul post (I still love consul for PoC's), so I try to face some facts:
-1. [Consul agent] takes part in Raft, so doing infrastructure discovery in your whole environment means every system takes part in [Raft]
+1. I have etcd in place anyway, no need for another service registry
 2. Have seen many problems during leadership election of a running cluster
   * Already happened, that consul got problems during new leadership election and it was impossible to restore the data - cluster was empty afterwards (worst case)
-3. Atlas is a more a less requirement, if you want to automate your environment (in a nice way)
+3. Atlas vs etcd discovery
 
 Consul for local testing and development is great, the web ui helps you to find problems during development quiete fast. But there is a reason, why everyone uses the web ui - have you ever tried using the CLI with dozens of applications writing to it? Without a TTL? Probably over months? Good luck! You need the UI for consul, otherwise you will see more zombies than everything else after a bit.
+
+On the other hand, the consul toolchain supports nativly what I'm gona describe here - there was no need for a blog post :-)
+
+I got something wrong by writing that the [consul agent] takes place in [Raft] and introduces an overhead for your environment. This is only the case if consul agent does not run in client mode - this mode is designed to have the lowest overhead to spread it in your environment. Thanks to the Hacker News community for pointing that out.
 
 ### Why etcd?
 Etcd is straight forward, it focuses on its main tasks: being a distributed key/value store. I personally don't have the feeling, that querying DNS for an endpoint is a must have for a service registry (although you can [enable it on etcd] as well). Same for the difference in handling nodes, services and the key/value pairs from consul - whats the point in treating them differently? So focusing on the basics was a good choice for etcd. But this also means, that you have to implement things like infrastructure discovery or health checks on your own. But you will see in the next sections, that its actually not hard to do so.
@@ -200,7 +204,7 @@ coreos:
         ExecStartPost=/bin/sh -c "/usr/bin/mv /tmp/etcd-${VERSION}-linux-amd64/etcdctl /opt/bin/etcdctl-etcd3"
 ```
 
-The biggest issue here is, if something fails you could end up with and endless loop fetching stuff from github. With my first implementation I got blocked multiple times, that's why I prevent the `install_etcd3` task to run multiple times - and even if, the files remains in `/tmp/etcd3.tar.gz` and will not get fetched again if its there.
+The biggest issue here is, if something fails you could end up with and endless loop fetching stuff from github. With my first implementation I got blocked multiple times, that's why I prevent the `install_etcd3` task to curl frequently from github - and even if, the files remains in `/tmp/etcd3.tar.gz` and will not get fetched again if its there.
 
 Surly that the etcd cluster should be [protected via SSL](https://coreos.com/etcd/docs/latest/etcd-live-http-to-https-migration.html), but certificate handling is a big part on its own, so I skip it here.
 
@@ -259,7 +263,7 @@ I've tried the following approaches:
 4. Using puppet for initial bootstrapping, than handed over responsibility to [confd]
 
 Option 2 and 3 haven't made it that long in my environment - the reason was, that I was not bound to changes in [consul] or [etcd], but to the next puppet run after the changes occured. That was just too much delay for me - but reducing the time for the puppet runs wasn't an option either.
-Option 1 was a bit of a hustle, since it has not worked to reconnect if the [consul] server was available from the beginning. If you spin up a whole environment and [consul] has to be there, bootstrapped and reachable at your defined endpoint, to even provision the first service this simply doesn't felt right.
+Option 1 was a bit of a hustle, since it has not worked to reconnect if the [consul] server was not available from the beginning. If you spin up a whole environment and [consul] has to be there, bootstrapped and reachable at your defined endpoint, to even provision the first service this simply doesn't felt right.
 Although there's a `:failure: graceful` in the puppet module, this hiera configuration has never worked in my stack and puppet timed out completly. 
 
 confd is configured in my environment, using [confd-puppet]. But I'm gonna show some plain-confd snippets, to not bind the post too much on my implementation.
