@@ -1,6 +1,6 @@
 [//]: (I just launched my new platform on AWS, trying to leverage most of the best practices when it comes to cloud architecture and scalability. This platform is mostly used for proof of concepts and prototypes - and since today also as a public blog to share the experiences I made with this environment and the prototypes I've built.)
 [//]: ("docker": "1.10")
-[//]: ("kubernetes": "1.4.3")
+[//]: ("kubernetes": "1.4.5")
 [//]: ("CoreOS": "1122.2.0")
 [//]: ("Puppet": "4.6.0")
 I just launched my new platform on AWS, trying to leverage most of the best practices when it comes to cloud architecture and scalability. This platform is mostly used for proof of concepts and prototypes - and since today also as a public blog to share the experiences I made with this environment and the prototypes I've built. 
@@ -75,7 +75,7 @@ For such a flexible and self-managing environment, monitoring and logging is one
 
 For infrastructure monitoring, I decided to give google's [stackdriver] a chance. It was great for the beginning, easy to setup - but only limited to data, that can be queried via the CloudWatch API. I haven't tried the custom metrics so far, but not even being able to see the memory usage right away is a bit less than what I expected (memory usage isn't a default metric from CloudWatch).
 
-For Container monitoring, I use [heapster]. Straight forward, easy to integrate into k8s, just works. 
+Since [stackdriver] turned out to be a good starting point, I'm actually using [influxdb] and [prometheus] to store metric and machine information, everything is dashboarded with [grafana]. Prometheus scrapes everything inside kubernetes which has a specific tag and is also used to gather the kubernetes master metrics and all my etcd clusters. Where prometheus uses a pull approach, telegraf is installed on all machines and pushes its data to influxdb. [Kapacitor] for alerting was a no-brainer since I'm using every other component of the [TICK] Stack anyways.
 
 ## The Blog architecture
 I'm gonna write about my blog architecture? Really? 
@@ -124,3 +124,8 @@ This blog acted more as a proof of concept for a fully integrated platform, leve
 [Logz.io]: http://logz.io
 [stackdriver]: http://www.stackdriver.com/
 [heapster]: https://github.com/kubernetes/heapster
+[influxdb]: https://www.influxdata.com/time-series-platform/influxdb/
+[TICK]: https://www.influxdata.com/get-started/what-is-the-tick-stack/
+[Kapacitor]: https://www.influxdata.com/time-series-platform/kapacitor/
+[grafana]: http://grafana.org/
+[prometheus]: https://prometheus.io/
